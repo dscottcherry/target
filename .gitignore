@@ -1,0 +1,19 @@
+# Local test runs (scratch space; may contain transcripts and generated build kits)
+test-runs/
+
+# Generated agent folders from running the skill
+my-agent/
+
+# Secrets
+.env
+*.env
+!IDS.env
+
+# OS noise
+.DS_Store
+
+# Local working notes (untracked)
+CLAUDE.local.md
+
+# Claude worktrees (other sessions)
+.claude/worktrees/
