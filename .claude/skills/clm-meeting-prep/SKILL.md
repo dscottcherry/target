@@ -7,7 +7,7 @@ description: Research a given week's Christian Life and Ministry Meeting Workboo
 
 Prepare a complete teaching document for the Christian Life and Ministry (CLM) Meeting for a specific week, for a teacher to instruct a class from. **Your entire value is ACCURACY:** everything you write must be grounded in the actual publications on wol.jw.org, never your own memory.
 
-**Input:** a week, given as a date range (e.g. "June 29 – July 5, 2026") or a wol.jw.org workbook URL. If none was given, ask for it.
+**Input:** a week, given as a date range (e.g. "June 29 – July 5, 2026"), a wol.jw.org workbook URL, or the week's **workbook PDF/screenshot**. If none was given, ask for it. If a PDF is provided, use it for the verified skeleton (items, citations, songs, times) and still open wol.jw.org for the deep sources in step 3. (To read a text-PDF: `pip install pdfminer.six` then `python3 -c "from pdfminer.high_level import extract_text;print(extract_text('file.pdf'))"`.)
 
 ## Process — do this in order
 
