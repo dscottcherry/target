@@ -17,3 +17,5 @@ CLAUDE.local.md
 
 # Claude worktrees (other sessions)
 .claude/worktrees/
+__pycache__/
+*.pyc
