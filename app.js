@@ -17,7 +17,7 @@ const SCRIPT = [
   "Take a breath. There's nothing you can break just by being on this page, so let me walk you through the whole thing, nice and slow.",
   "Right at the top is our promise: learning A.I. shouldn't feel like a foreign language. We teach you to use tools like ChatGPT in plain English, patient and judgment-free, one gentle step at a time.",
   "A little further down you'll see the three worries we hear most: being afraid of breaking something, instructions that sound like they were written for engineers, and worrying about scams. If any of those feel familiar, you are in exactly the right place.",
-  "Then there's our calm, guided path. Just three sessions. First, a friendly conversation about what you'd actually like to do. Then hands-on practice, side by side. And finally, a simple cheat sheet and a real phone number to call whenever you get stuck.",
+  "Then there's our calm, guided path. Just three sessions. First, a friendly conversation about what you'd actually like to do. Then hands-on practice, side by side. And finally, a simple reference guide and a real phone number to call whenever you get stuck.",
   "Keep going and you'll meet Margaret. She's seventy-four, and she finally asked the question she'd been too embarrassed to ask anyone. She didn't feel silly once. She felt capable. That's the whole idea.",
   "Near the bottom, your very first session is on us. No pressure, no obligation, just a friendly hour to see if this feels right for you.",
   "When you're ready, pop your name and email into the sign-up box. We'll send you our class schedule and a gentle note whenever a new class opens up. Nothing else, I promise.",
