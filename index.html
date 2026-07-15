@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Silver&amp;Screen — Learn AI, one patient step at a time</title>
+  <meta name="description" content="We teach seniors to use AI tools like ChatGPT in plain English — patient, judgment-free, one gentle step at a time. Sign up for classes and schedule updates." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌿%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ============================= HEADER ============================= -->
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top">Silver&amp;Screen</a>
+      <nav class="header-nav">
+        <a href="#how">How it works</a>
+        <a href="#path">The path</a>
+        <a href="#signup">Sign up</a>
+      </nav>
+      <a class="btn btn-green header-cta" href="#book">Book a Free Session</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ============================= HERO ============================= -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <span class="badge">One-on-one, at your own pace</span>
+          <h1>Learning AI shouldn't feel&nbsp;like a foreign language.</h1>
+          <p class="lede">
+            We teach seniors to use AI tools like ChatGPT in plain English —
+            patient, judgment-free, one gentle step at a time.
+            No jargon, no rushing, no feeling foolish.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-orange" href="#signup">Get Started Free</a>
+            <a class="link-arrow" href="#how">See how it works ↓</a>
+          </div>
+        </div>
+
+        <!-- ============ TALKING PERSONA (Picture 1) ============ -->
+        <figure class="persona" id="persona">
+          <div class="persona-screen">
+            <img src="assets/persona.png" alt="Walter, your Silver&amp;Screen welcome host" class="persona-img" />
+
+            <!-- live badge -->
+            <div class="live-badge"><span class="live-dot"></span>LIVE</div>
+
+            <!-- speaking indicator (animated bars) -->
+            <div class="speaking-bars" id="speakingBars" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+
+            <!-- real-time caption -->
+            <div class="caption-bar" id="captionBar">
+              <p class="caption-text" id="captionText">
+                Press play and I'll walk you through this whole page.
+              </p>
+            </div>
+          </div>
+
+          <figcaption class="persona-controls">
+            <button class="btn btn-play" id="playBtn" type="button" aria-pressed="false">
+              <span class="play-icon" id="playIcon">▶</span>
+              <span id="playLabel">Play welcome from Walter</span>
+            </button>
+            <button class="btn-ghost" id="restartBtn" type="button" hidden>Restart</button>
+            <span class="persona-name">Walter · your host</span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============================= WORRIES ============================= -->
+    <section class="worries" id="how">
+      <div class="wrap">
+        <h2 class="section-title">Why AI feels out of reach right now</h2>
+        <p class="section-sub">These are the three things we hear most from the families we work with.</p>
+
+        <div class="cards">
+          <article class="card">
+            <div class="card-icon">⚠️</div>
+            <h3>Fear of breaking something</h3>
+            <p>One wrong click feels like it might erase everything. That worry alone keeps most people from ever trying.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">📄</div>
+            <h3>Instructions written for engineers</h3>
+            <p>Tutorials assume you already know the jargon. We start from zero and explain everything in plain words.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🛡️</div>
+            <h3>Worry about scams</h3>
+            <p>New technology brings new tricks. We teach you how to spot them and use AI safely, not just how to use it.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================= PATH ============================= -->
+    <section class="path" id="path">
+      <div class="wrap">
+        <h2 class="section-title">A calm, guided path forward</h2>
+        <p class="section-sub">Three sessions. One patient teacher. Skills you'll actually remember.</p>
+
+        <ol class="steps">
+          <li class="step">
+            <span class="step-num">1</span>
+            <h3>A friendly conversation</h3>
+            <p>We start by learning what you'd actually like AI to help with — emails, recipes, photos, staying in touch with family.</p>
+          </li>
+          <li class="step">
+            <span class="step-num">2</span>
+            <h3>Hands-on practice, together</h3>
+            <p>You drive, we sit beside you (in person or on a video call), explaining each step as you go.</p>
+          </li>
+          <li class="step">
+            <span class="step-num">3</span>
+            <h3>A cheat sheet &amp; ongoing support</h3>
+            <p>Leave with simple written notes and a number to call if you ever get stuck again.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ TESTIMONIAL / "I finally asked a question" (Picture 3) ============ -->
+    <section class="testimonial">
+      <div class="wrap testimonial-inner">
+        <img src="assets/question.png" alt="A student raising her hand to ask a question in class" class="testimonial-avatar" />
+        <blockquote>
+          &ldquo;I finally asked it a question I'd been too embarrassed to ask anyone.
+          I didn't feel silly once. I felt capable.&rdquo;
+        </blockquote>
+        <cite>Margaret, 74 — graduated the course last spring</cite>
+      </div>
+    </section>
+
+    <!-- ============ BOOK A FREE SESSION (last picture) ============ -->
+    <section class="book" id="book">
+      <div class="wrap book-grid">
+        <img src="assets/book-session.png" alt="A small group learning AI together in a friendly classroom" class="book-img" />
+        <div class="book-copy">
+          <h2>Your first session is on&nbsp;us.</h2>
+          <p>No pressure, no obligation — just a friendly hour to see if this feels right for you.</p>
+          <a class="btn btn-orange" href="#signup">Book a Free Session</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================= SIGN-UP ============================= -->
+    <section class="signup" id="signup">
+      <div class="wrap signup-card">
+        <div class="signup-copy">
+          <h2>Save your seat &amp; get schedule updates</h2>
+          <p>Add your name and email and we'll send you the current class schedule — plus a gentle note whenever a new session opens up. That's all. No spam, ever, and you can unsubscribe with one click.</p>
+          <ul class="reassure">
+            <li>✔ Class schedule delivered to your inbox</li>
+            <li>✔ Email alerts when new sessions open</li>
+            <li>✔ Your first session is always free</li>
+          </ul>
+        </div>
+
+        <form class="signup-form" id="signupForm" novalidate>
+          <div class="field">
+            <label for="name">Your name</label>
+            <input type="text" id="name" name="name" autocomplete="name" placeholder="e.g. Margaret P." required />
+          </div>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com" required />
+          </div>
+          <label class="checkbox">
+            <input type="checkbox" id="notify" name="notify" checked />
+            <span>Yes, email me schedule updates and new class dates.</span>
+          </label>
+          <button class="btn btn-orange btn-block" type="submit" id="submitBtn">Sign me up</button>
+          <p class="form-note" id="formNote" role="status" aria-live="polite"></p>
+          <p class="form-fineprint">By signing up you agree to receive occasional class emails from Silver&amp;Screen. We never share your details.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================= FOOTER ============================= -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Silver&amp;Screen · Teaching AI to Seniors, one patient conversation at a time.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "silver-and-screen-landing",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Silver&Screen — landing page for AI classes for seniors, with signup and email schedule notifications.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "notify": "node scripts/notify.js"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "optionalDependencies": {
+    "nodemailer": "^6.9.0"
+  }
+}
