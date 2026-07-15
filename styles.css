@@ -167,22 +167,6 @@ img { max-width: 100%; display: block; }
 .speaking-bars span:nth-child(5){ animation-delay:.6s; }
 @keyframes bar { 0%,100% { height: 25%; } 50% { height: 100%; } }
 
-/* caption bar */
-.caption-bar {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(to top, rgba(10,20,16,.92), rgba(10,20,16,.55) 70%, transparent);
-  padding: 2.4rem 1.1rem 1rem;
-  min-height: 34%;
-  display: flex; align-items: flex-end;
-}
-.caption-text {
-  margin: 0; color: #fdfaf3;
-  font-size: 1.02rem; line-height: 1.45; font-weight: 500;
-  text-shadow: 0 1px 4px rgba(0,0,0,.5);
-}
-.caption-text .w { opacity: .32; transition: opacity .18s ease; }
-.caption-text .w.on { opacity: 1; }
-
 .persona-controls {
   display: flex; align-items: center; gap: .9rem;
   margin-top: 1rem; flex-wrap: wrap;

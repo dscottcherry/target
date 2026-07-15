@@ -1,6 +1,6 @@
 /* ============================================================
    Silver&Screen — landing page behaviour
-   1) Walter, the talking host: real-time speech + synced captions
+   1) Walter, the talking host: real-time spoken welcome
    2) Sign-up form: validation + submit to /api/signup (with a
       graceful offline fallback so the page still works on its own)
    ============================================================ */
@@ -8,8 +8,8 @@
 /* ---------------------------------------------------------------
    1) THE TALKING HOST ("Walter")
    A supportive, friendly welcome that walks a new student through
-   the entire page. Each line is spoken aloud (Web Speech API) and
-   the captions light up word-by-word so he looks like he is
+   the entire page. Each line is spoken aloud (Web Speech API) while
+   the LIVE badge and audio bars animate, so he looks like he is
    talking in real time.
 --------------------------------------------------------------- */
 const SCRIPT = [
@@ -25,7 +25,6 @@ const SCRIPT = [
 ];
 
 const persona     = document.getElementById('persona');
-const captionText = document.getElementById('captionText');
 const playBtn     = document.getElementById('playBtn');
 const playIcon    = document.getElementById('playIcon');
 const playLabel   = document.getElementById('playLabel');
@@ -36,32 +35,6 @@ let lineIndex = 0;
 let isPlaying = false;
 let fallbackTimer = null;
 
-/* Split a line into word-spans so we can highlight them as spoken. */
-function renderLine(text) {
-  captionText.innerHTML = '';
-  const words = text.split(/(\s+)/); // keep the spaces
-  const spans = [];
-  words.forEach(chunk => {
-    if (/^\s+$/.test(chunk)) {
-      captionText.appendChild(document.createTextNode(chunk));
-    } else if (chunk.length) {
-      const s = document.createElement('span');
-      s.className = 'w';
-      s.textContent = chunk;
-      captionText.appendChild(s);
-      spans.push({ el: s, index: text.indexOf(chunk) });
-    }
-  });
-  return spans;
-}
-
-/* Light up every word up to a character position (real-time sync). */
-function highlightUpTo(spans, charIndex) {
-  spans.forEach(w => {
-    if (w.index <= charIndex) w.el.classList.add('on');
-  });
-}
-
 function setPlayingUI(playing) {
   isPlaying = playing;
   persona.classList.toggle('speaking', playing);
@@ -71,11 +44,10 @@ function setPlayingUI(playing) {
   restartBtn.hidden = lineIndex === 0 && !playing;
 }
 
-/* Speak one line, syncing captions, then advance. */
+/* Speak one line of the welcome, then advance to the next. */
 function speakLine() {
   if (lineIndex >= SCRIPT.length) { finish(); return; }
-  const text  = SCRIPT[lineIndex];
-  const spans = renderLine(text);
+  const text = SCRIPT[lineIndex];
 
   if (synth && 'SpeechSynthesisUtterance' in window) {
     const u = new SpeechSynthesisUtterance(text);
@@ -84,40 +56,30 @@ function speakLine() {
     const voice = pickVoice();
     if (voice) u.voice = voice;
 
-    u.onboundary = (e) => {
-      if (typeof e.charIndex === 'number') highlightUpTo(spans, e.charIndex);
-    };
     u.onend = () => {
-      highlightUpTo(spans, text.length);
       if (!isPlaying) return;           // was paused/stopped
       lineIndex++;
       setTimeout(speakLine, 450);       // a natural breath between lines
     };
     synth.speak(u);
   } else {
-    // No speech synthesis available — reveal captions on a timer instead.
-    fallbackReveal(text, spans);
+    // No speech synthesis available — pace the lines on a timer so the
+    // "live" animation still runs for roughly the length of the speech.
+    fallbackAdvance(text);
   }
 }
 
-/* Fallback for browsers without the Web Speech API: reveal words on a
-   timer so the captions still play in real time. */
-function fallbackReveal(text, spans) {
-  const words = spans.length || 1;
-  const perWord = 320; // ms
-  let i = 0;
-  clearInterval(fallbackTimer);
-  fallbackTimer = setInterval(() => {
-    if (!isPlaying) { clearInterval(fallbackTimer); return; }
-    if (i < spans.length) {
-      spans[i].el.classList.add('on');
-      i++;
-    } else {
-      clearInterval(fallbackTimer);
-      lineIndex++;
-      setTimeout(speakLine, 500);
-    }
-  }, perWord);
+/* Fallback for browsers without the Web Speech API: hold each line for a
+   moment based on its length, then move on. */
+function fallbackAdvance(text) {
+  const words = text.split(/\s+/).length;
+  const holdMs = Math.max(2200, words * 320);
+  clearTimeout(fallbackTimer);
+  fallbackTimer = setTimeout(() => {
+    if (!isPlaying) return;
+    lineIndex++;
+    speakLine();
+  }, holdMs);
 }
 
 /* Prefer a natural English voice when one is available. */
@@ -141,12 +103,12 @@ function play() {
 function pause() {
   setPlayingUI(false);
   if (synth) synth.pause();
-  clearInterval(fallbackTimer);
+  clearTimeout(fallbackTimer);
 }
 
 function restart() {
   if (synth) synth.cancel();
-  clearInterval(fallbackTimer);
+  clearTimeout(fallbackTimer);
   lineIndex = 0;
   play();
 }
