@@ -15,7 +15,7 @@
 const SCRIPT = [
   "Hi there, and welcome. I'm so glad you found us. My name's Walter, and I help folks here at Silver and Screen.",
   "Take a breath. There's nothing you can break just by being on this page, so let me walk you through the whole thing, nice and slow.",
-  "Right at the top is our promise: learning A.I. shouldn't feel like a foreign language. We teach you to use tools like ChatGPT in plain English, patient and judgment-free, one gentle step at a time.",
+  "Right at the top is our promise: learning A.I. shouldn't feel like a foreign language. We teach you to use everyday AI tools in plain English, patient and judgment-free, one gentle step at a time.",
   "A little further down you'll see the three worries we hear most: being afraid of breaking something, instructions that sound like they were written for engineers, and worrying about scams. If any of those feel familiar, you are in exactly the right place.",
   "Then there's our calm, guided path. Just three sessions. First, a friendly conversation about what you'd actually like to do. Then hands-on practice, side by side. And finally, a simple reference guide and a real phone number to call whenever you get stuck.",
   "Keep going and you'll meet Margaret. She's seventy-four, and she finally asked the question she'd been too embarrassed to ask anyone. She didn't feel silly once. She felt capable. That's the whole idea.",

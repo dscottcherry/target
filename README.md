@@ -1,7 +1,7 @@
 # Silver&Screen — Landing Page
 
 A warm, senior-friendly landing page for **Silver&Screen**, which teaches
-older adults to use AI tools like ChatGPT in plain English. Visitors can
+older adults to use everyday AI tools in plain English. Visitors can
 **sign up for classes** and **receive email notifications about schedule
 updates**.
 
