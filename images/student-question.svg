@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 747 522" role="img" aria-label="A student comfortably asking a question during class">
+  <defs>
+    <linearGradient id="sq-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fdeede"/>
+      <stop offset="1" stop-color="#f6dcc0"/>
+    </linearGradient>
+  </defs>
+  <rect width="747" height="522" fill="url(#sq-bg)"/>
+  <circle cx="120" cy="110" r="80" fill="#ffffff" opacity="0.4"/>
+  <circle cx="650" cy="440" r="90" fill="#ffffff" opacity="0.3"/>
+  <!-- question bubble -->
+  <g transform="translate(430 70)">
+    <rect x="0" y="0" width="230" height="130" rx="26" fill="#ffffff"/>
+    <path d="M40 130 l0 40 l44 -40 Z" fill="#ffffff"/>
+    <text x="115" y="90" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="90" font-weight="800" fill="#f0913e">?</text>
+  </g>
+  <!-- seated student with raised hand -->
+  <g transform="translate(210 150)">
+    <!-- body -->
+    <path d="M-70 372 C-70 250 -34 205 30 205 C94 205 130 250 130 372 Z" fill="#14746f"/>
+    <path d="M-24 210 L30 250 L84 210 L70 200 L30 224 L-10 200 Z" fill="#f4f1ea"/>
+    <!-- head -->
+    <circle cx="30" cy="132" r="56" fill="#f6c9a6"/>
+    <path d="M-26 128 C-26 74 86 74 86 128 C86 92 66 66 30 66 C-6 66 -26 92 -26 128 Z" fill="#4a3120"/>
+    <circle cx="16" cy="134" r="5" fill="#3a2418"/>
+    <circle cx="46" cy="134" r="5" fill="#3a2418"/>
+    <path d="M16 156 q14 12 30 0" fill="none" stroke="#b56a4a" stroke-width="5" stroke-linecap="round"/>
+    <!-- raised arm -->
+    <path d="M96 250 C140 232 166 176 168 120" fill="none" stroke="#f6c9a6" stroke-width="26" stroke-linecap="round"/>
+    <circle cx="168" cy="104" r="19" fill="#f6c9a6"/>
+  </g>
+  <!-- desk -->
+  <rect x="90" y="470" width="560" height="52" rx="10" fill="#e0b489"/>
+  <rect x="90" y="470" width="560" height="16" rx="8" fill="#eac59f"/>
+</svg>

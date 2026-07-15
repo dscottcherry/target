@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 688 549" role="img" aria-label="A friendly instructor helping adults learn technology in a classroom">
+  <defs>
+    <linearGradient id="cr-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eef5f3"/>
+      <stop offset="1" stop-color="#dcebe7"/>
+    </linearGradient>
+  </defs>
+  <rect width="688" height="549" fill="url(#cr-bg)"/>
+  <!-- floor -->
+  <rect y="430" width="688" height="119" fill="#cfe0db"/>
+  <!-- whiteboard -->
+  <g transform="translate(70 60)">
+    <rect width="300" height="180" rx="8" fill="#ffffff" stroke="#c3d6d1" stroke-width="4"/>
+    <line x1="28" y1="46" x2="180" y2="46" stroke="#14746f" stroke-width="8" stroke-linecap="round"/>
+    <line x1="28" y1="82" x2="242" y2="82" stroke="#f0913e" stroke-width="8" stroke-linecap="round"/>
+    <line x1="28" y1="118" x2="150" y2="118" stroke="#9db8b2" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="252" cy="128" r="26" fill="none" stroke="#14746f" stroke-width="6"/>
+    <path d="M252 116 v14 h11" fill="none" stroke="#14746f" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <!-- instructor -->
+  <g transform="translate(430 150)">
+    <path d="M-46 300 C-46 210 -22 172 22 172 C66 172 90 210 90 300 Z" fill="#f0913e"/>
+    <path d="M-6 176 L22 208 L50 176 L40 168 L22 184 L4 168 Z" fill="#f7f3ea"/>
+    <circle cx="22" cy="120" r="42" fill="#e7a985"/>
+    <path d="M-20 116 C-20 78 64 78 64 116 C64 92 48 74 22 74 C-4 74 -20 92 -20 116 Z" fill="#3d3d46"/>
+    <circle cx="10" cy="120" r="4" fill="#3a2418"/>
+    <circle cx="36" cy="120" r="4" fill="#3a2418"/>
+    <path d="M12 138 q10 8 22 0" fill="none" stroke="#b56a4a" stroke-width="4" stroke-linecap="round"/>
+    <!-- pointing arm toward board -->
+    <path d="M-40 210 C-80 196 -120 172 -150 150" fill="none" stroke="#e7a985" stroke-width="20" stroke-linecap="round"/>
+    <circle cx="-152" cy="148" r="13" fill="#e7a985"/>
+  </g>
+  <!-- learner 1 -->
+  <g transform="translate(150 300)">
+    <path d="M-40 250 C-40 178 -18 150 20 150 C58 150 80 178 80 250 Z" fill="#14746f"/>
+    <circle cx="20" cy="104" r="38" fill="#f6c9a6"/>
+    <path d="M-16 100 C-16 66 56 66 56 100 C56 78 42 62 20 62 C-2 62 -16 78 -16 100 Z" fill="#6b4a34"/>
+    <circle cx="10" cy="106" r="3.6" fill="#3a2418"/>
+    <circle cx="30" cy="106" r="3.6" fill="#3a2418"/>
+    <!-- tablet -->
+    <rect x="-24" y="196" width="88" height="60" rx="8" fill="#0f5c58" transform="rotate(-8 20 226)"/>
+    <rect x="-14" y="204" width="68" height="44" rx="4" fill="#e8f3f1" transform="rotate(-8 20 226)"/>
+  </g>
+  <!-- learner 2 -->
+  <g transform="translate(300 330)">
+    <path d="M-36 220 C-36 158 -16 132 18 132 C52 132 72 158 72 220 Z" fill="#0f5c58"/>
+    <circle cx="18" cy="94" r="34" fill="#e7a985"/>
+    <path d="M-14 92 C-14 60 50 60 50 92 C50 72 38 58 18 58 C-2 58 -14 72 -14 92 Z" fill="#8a8f98"/>
+    <circle cx="9" cy="96" r="3.4" fill="#3a2418"/>
+    <circle cx="27" cy="96" r="3.4" fill="#3a2418"/>
+  </g>
+</svg>
