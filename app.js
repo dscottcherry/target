@@ -51,10 +51,12 @@ function speakLine() {
 
   if (synth && 'SpeechSynthesisUtterance' in window) {
     const u = new SpeechSynthesisUtterance(text);
-    u.rate = 0.92;   // a calm, unhurried pace
-    u.pitch = 1.0;
     const voice = pickVoice();
     if (voice) u.voice = voice;
+    // A natural voice sounds best near normal speed; only the old robotic
+    // fallbacks need slowing down. Keep the pace warm and conversational.
+    u.rate = isNaturalVoice(voice) ? 1.0 : 0.9;
+    u.pitch = 1.02;   // a touch of warmth
 
     u.onend = () => {
       if (!isPlaying) return;           // was paused/stopped
@@ -82,16 +84,50 @@ function fallbackAdvance(text) {
   }, holdMs);
 }
 
-/* Prefer a natural English voice when one is available. */
+/* Names/markers of the high-quality voices modern browsers ship. These
+   sound natural; the unmarked defaults (eSpeak etc.) sound robotic. */
+const NATURAL_RE = /natural|neural|premium|enhanced|google|siri|online/i;
+
+function isNaturalVoice(v) {
+  return !!(v && NATURAL_RE.test(v.name || ''));
+}
+
+/* Pick the most natural-sounding English voice available by scoring every
+   installed voice — we can't install voices, but we can choose the best. */
 function pickVoice() {
   if (!synth) return null;
   const voices = synth.getVoices() || [];
-  return (
-    voices.find(v => /en-US/i.test(v.lang) && /male|Daniel|Alex|David/i.test(v.name)) ||
-    voices.find(v => /en(-|_)?US/i.test(v.lang)) ||
-    voices.find(v => /^en/i.test(v.lang)) ||
-    null
-  );
+  if (!voices.length) return null;
+
+  const score = (v) => {
+    const n = (v.name || '').toLowerCase();
+    const lang = (v.lang || '').toLowerCase();
+    let s = 0;
+
+    // language preference
+    if (lang.startsWith('en-us')) s += 40;
+    else if (lang.startsWith('en-gb') || lang.startsWith('en-au') || lang.startsWith('en-ca')) s += 30;
+    else if (lang.startsWith('en')) s += 22;
+    else s -= 40;                       // non-English: avoid
+
+    // quality markers (the big win over the robotic default)
+    if (/natural|neural/.test(n)) s += 70;
+    if (/premium|enhanced/.test(n)) s += 55;
+    if (/online/.test(n)) s += 30;
+    if (/google/.test(n)) s += 45;      // Chrome's Google voices are far better than eSpeak
+    if (/siri/.test(n)) s += 40;
+    if (v.localService === false) s += 10;  // cloud voices are usually higher quality
+
+    // a warm male voice suits Walter (soft preference, not a requirement)
+    if (/\b(guy|davis|tony|aaron|arthur|eric|roger|christopher|william|matthew|daniel|david|mark|alex|fred|male|man)\b/.test(n)) s += 14;
+
+    // penalise the tinny / novelty / robotic voices
+    if (/espeak|compact|zarvox|albert|whisper|bells|cellos|trinoids|boing|bubbles|junior|organ|bad news|good news|wobble|superstar/.test(n)) s -= 90;
+
+    return s;
+  };
+
+  return voices.slice().sort((a, b) => score(b) - score(a))[0] || null;
 }
 
 function play() {
