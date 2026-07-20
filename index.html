@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WOL Study Assistant</title>
+  <meta name="description" content="A fast, offline-friendly assistant for looking up scriptures and study material in the Watchtower ONLINE Library and NWT Study Bible." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">📖</span>
+      <div>
+        <h1>WOL Study Assistant</h1>
+        <p class="tagline">Scripture &amp; study lookup for the Watchtower ONLINE Library</p>
+      </div>
+    </div>
+    <button id="theme-toggle" class="icon-btn" title="Toggle light / dark" aria-label="Toggle theme">◐</button>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="lookup" role="tab">Lookup</button>
+    <button class="tab" data-tab="search" role="tab">Topic Search</button>
+    <button class="tab" data-tab="books" role="tab">Books</button>
+    <button class="tab" data-tab="saved" role="tab">Saved</button>
+  </nav>
+
+  <main>
+    <!-- Lookup -->
+    <section class="panel active" data-panel="lookup">
+      <div class="card">
+        <label class="field-label" for="ref-input">Scripture reference</label>
+        <div class="input-row">
+          <input id="ref-input" type="text" placeholder="e.g. John 3:16, 1 John 4:8-10, Psalm 23"
+                 autocomplete="off" spellcheck="false" />
+          <button id="lookup-go" class="btn primary">Look up</button>
+        </div>
+        <p class="hint">Type a reference and press Enter. Opens the exact verse in the NWT Study Bible on jw.org.</p>
+
+        <details class="picker">
+          <summary>Pick a book instead</summary>
+          <div class="picker-row">
+            <select id="book-select" aria-label="Book"></select>
+            <input id="chapter-input" type="number" min="1" placeholder="ch" aria-label="Chapter" />
+            <input id="verse-input" type="number" min="1" placeholder="v" aria-label="Verse" />
+            <button id="picker-go" class="btn secondary">Go</button>
+          </div>
+        </details>
+      </div>
+
+      <div id="lookup-result" class="result-area"></div>
+
+      <div class="card subtle">
+        <h2 class="mini-title">Recent lookups</h2>
+        <div id="history-box"></div>
+      </div>
+    </section>
+
+    <!-- Topic Search -->
+    <section class="panel" data-panel="search">
+      <div class="card">
+        <label class="field-label" for="search-input">Search the library</label>
+        <div class="input-row">
+          <input id="search-input" type="text" placeholder="e.g. faith, resurrection, God's Kingdom"
+                 autocomplete="off" />
+          <button id="search-go" class="btn primary">Search WOL</button>
+        </div>
+        <p class="hint">Searches every publication on wol.jw.org in a new tab.</p>
+        <h2 class="mini-title">Popular topics</h2>
+        <div id="topic-chips" class="chip-row"></div>
+      </div>
+    </section>
+
+    <!-- Books -->
+    <section class="panel" data-panel="books">
+      <div class="card">
+        <label class="field-label" for="books-filter">Browse all 66 books</label>
+        <input id="books-filter" type="text" placeholder="Filter books…" autocomplete="off" />
+        <div id="books-list" class="books-list"></div>
+      </div>
+    </section>
+
+    <!-- Saved -->
+    <section class="panel" data-panel="saved">
+      <div class="card">
+        <h2 class="mini-title">Bookmarked passages</h2>
+        <div id="bookmarks-box"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>Deep-links open official content on
+      <a href="https://wol.jw.org" target="_blank" rel="noopener noreferrer">wol.jw.org</a> and
+      <a href="https://www.jw.org" target="_blank" rel="noopener noreferrer">jw.org</a>.
+      This is an independent study helper and is not affiliated with those sites.</p>
+  </footer>
+
+  <script src="js/bible-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
