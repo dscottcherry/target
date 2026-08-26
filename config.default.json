@@ -1,0 +1,26 @@
+{
+  "model": "llama3.1:8b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "name": "JARVIS",
+  "user_name": "Sir",
+  "system_prompt": "You are JARVIS, a local assistant running on the user's own machine. Be concise, direct and useful. Answer in a sentence or two unless asked for detail. If you do not know something, say so plainly.",
+  "temperature": 0.7,
+  "max_history_turns": 12,
+  "request_timeout_seconds": 120,
+  "voice": {
+    "enabled": false,
+    "rate": 185,
+    "volume": 1.0,
+    "voice_name": ""
+  },
+  "listen": {
+    "enabled": true,
+    "whisper_model": "base.en",
+    "device": "auto",
+    "silence_threshold": 0.012,
+    "silence_seconds": 1.2,
+    "max_seconds": 30
+  },
+  "history_file": "data/history.jsonl",
+  "log_level": "INFO"
+}
