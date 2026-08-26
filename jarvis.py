@@ -14,10 +14,14 @@ Exit codes: 0 = fine, 1 = usable but something optional is missing,
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import logging
 import os
+import queue
+import re
 import sys
+import threading
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -82,6 +86,12 @@ class Ollama:
         self.model = config["model"]
         self.temperature = config.get("temperature", 0.7)
         self.timeout = config.get("request_timeout_seconds", 120)
+        # Caps that keep a laptop responsive: a shorter context is faster to
+        # process, and a reply cap stops the model from monologuing.
+        self.num_ctx = config.get("num_ctx", 2048)
+        self.num_predict = config.get("num_predict", 220)
+        # Keeping the model resident avoids reloading gigabytes per question.
+        self.keep_alive = config.get("keep_alive", "30m")
 
     def is_up(self) -> bool:
         try:
@@ -110,7 +120,12 @@ class Ollama:
             "model": self.model,
             "messages": messages,
             "stream": True,
-            "options": {"temperature": self.temperature},
+            "keep_alive": self.keep_alive,
+            "options": {
+                "temperature": self.temperature,
+                "num_ctx": self.num_ctx,
+                "num_predict": self.num_predict,
+            },
         }
         with requests.post(
             f"{self.host}/api/chat", json=payload, stream=True, timeout=self.timeout
@@ -132,44 +147,129 @@ class Ollama:
                     return
 
 
+# ------------------------------------------------------------------- sentences
+_SENTENCE_END = re.compile(r"""(?:(?<!\d)\.(?!\d)|[!?\u2026])["')\]]*(?:\s|$)""")
+
+
+def split_sentences(text: str) -> tuple[list[str], str]:
+    """Split off every complete sentence, returning them and the leftover.
+
+    A period between two digits does not end a sentence, so "3.5 miles" is not
+    chopped in half on its way to the speech engine.
+    """
+    out: list[str] = []
+    while True:
+        match = _SENTENCE_END.search(text)
+        if not match:
+            break
+        segment = text[: match.end()].strip()
+        if segment:
+            out.append(segment)
+        text = text[match.end() :]
+    return out, text
+
+
+def _module_present(name: str) -> bool:
+    """True if the module can be imported, without importing it."""
+    if name in sys.modules:
+        return True
+    try:
+        return importlib.util.find_spec(name) is not None
+    except (ImportError, ValueError):
+        return False
+
+
 # ------------------------------------------------------------------ speech out
 class Voice:
-    """Windows SAPI5 speech, via pyttsx3. Silently inert if unavailable."""
+    """Windows SAPI5 speech via pyttsx3, on a worker thread.
+
+    Speech runs in the background so the model can keep generating while an
+    earlier sentence is still being spoken. The engine is created inside the
+    worker because SAPI objects belong to the thread that made them.
+    """
 
     def __init__(self, config: dict):
-        self.engine = None
         settings = config.get("voice", {})
-        if not settings.get("enabled"):
-            return
-        try:
-            import pyttsx3
-
-            self.engine = pyttsx3.init()
-            self.engine.setProperty("rate", settings.get("rate", 185))
-            self.engine.setProperty("volume", settings.get("volume", 1.0))
-            wanted = (settings.get("voice_name") or "").lower()
-            if wanted:
-                for v in self.engine.getProperty("voices"):
-                    if wanted in v.name.lower():
-                        self.engine.setProperty("voice", v.id)
-                        break
-        except Exception as exc:  # pyttsx3 raises plain Exceptions
-            log.warning("speech output unavailable: %s", exc)
-            self.engine = None
+        self.settings = settings
+        self.enabled = bool(settings.get("enabled", True))
+        self._queue: "queue.Queue[str | None]" = queue.Queue()
+        self._thread: threading.Thread | None = None
+        self._failed = False
+        # Check for the package up front so the banner tells the truth and no
+        # warning lands in the middle of a streamed answer.
+        if self.enabled and not _module_present("pyttsx3"):
+            log.warning("no speech output: pyttsx3 is not installed - re-run the setup to hear replies")
+            self._failed = True
 
     @property
     def available(self) -> bool:
-        return self.engine is not None
+        return self.enabled and not self._failed
+
+    def _start(self) -> None:
+        if self._thread is None and self.enabled and not self._failed:
+            self._thread = threading.Thread(target=self._worker, daemon=True)
+            self._thread.start()
+
+    def _build_engine(self):
+        import pyttsx3
+
+        engine = pyttsx3.init()
+        engine.setProperty("rate", self.settings.get("rate", 190))
+        engine.setProperty("volume", self.settings.get("volume", 1.0))
+        wanted = (self.settings.get("voice_name") or "").lower()
+        if wanted:
+            for v in engine.getProperty("voices"):
+                if wanted in v.name.lower():
+                    engine.setProperty("voice", v.id)
+                    break
+        return engine
+
+    def _worker(self) -> None:
+        try:
+            engine = self._build_engine()
+        except Exception as exc:  # pyttsx3 raises plain Exceptions
+            log.warning("speech output unavailable: %s", exc)
+            self._failed = True
+            self._drain()
+            return
+        while True:
+            item = self._queue.get()
+            try:
+                if item is None:
+                    return
+                engine.say(item)
+                engine.runAndWait()
+            except Exception as exc:
+                log.warning("speech output failed: %s", exc)
+                self._failed = True
+            finally:
+                self._queue.task_done()
+
+    def _drain(self) -> None:
+        """Swallow anything already queued once the engine is known bad."""
+        while True:
+            item = self._queue.get()
+            self._queue.task_done()
+            if item is None:
+                return
 
     def say(self, text: str) -> None:
-        if not self.engine or not text.strip():
+        """Queue one phrase. Returns immediately."""
+        if not self.enabled or self._failed or not text or not text.strip():
             return
-        try:
-            self.engine.say(text)
-            self.engine.runAndWait()
-        except Exception as exc:
-            log.warning("speech output failed: %s", exc)
-            self.engine = None
+        self._start()
+        self._queue.put(text.strip())
+
+    def wait(self) -> None:
+        """Block until everything queued has been spoken."""
+        if self._thread is not None and not self._failed:
+            self._queue.join()
+
+    def close(self) -> None:
+        if self._thread is not None:
+            self._queue.put(None)
+            self._thread.join(timeout=10)
+            self._thread = None
 
 
 # ------------------------------------------------------------------- speech in
@@ -257,9 +357,11 @@ class Jarvis:
             + [{"role": "user", "content": prompt}]
         )
 
-    def ask(self, prompt: str, echo: bool = True) -> str:
+    def ask(self, prompt: str, echo: bool = True, speak: bool = True) -> str:
+        """Stream one reply, speaking each sentence as soon as it is complete."""
         messages = self.messages_for(prompt)
         parts: list[str] = []
+        pending = ""
         if echo:
             print(f"\n{self.name}: ", end="", flush=True)
         try:
@@ -267,6 +369,10 @@ class Jarvis:
                 parts.append(chunk)
                 if echo:
                     print(chunk, end="", flush=True)
+                if speak and self.voice.available:
+                    sentences, pending = split_sentences(pending + chunk)
+                    for sentence in sentences:
+                        self.voice.say(sentence)
         except requests.RequestException as exc:
             print(f"\n[!] Could not reach Ollama at {self.client.host}: {exc}")
             return ""
@@ -275,6 +381,8 @@ class Jarvis:
             return ""
         if echo:
             print()
+        if speak and pending.strip():
+            self.voice.say(pending)
 
         answer = "".join(parts).strip()
         if answer:
@@ -313,7 +421,8 @@ class Jarvis:
     def chat_loop(self) -> int:
         if not self.preflight():
             return 2
-        print(f"\n{self.name} online - model {self.client.model}.")
+        heard = "speaking replies aloud" if self.voice.available else "text only (--speak to hear replies)"
+        print(f"\n{self.name} online - model {self.client.model}, {heard}.")
         print("Type 'exit' to quit, 'clear' to forget this conversation.\n")
         while True:
             try:
@@ -329,9 +438,8 @@ class Jarvis:
                 self.history.clear()
                 print("(conversation cleared)")
                 continue
-            answer = self.ask(prompt)
-            if answer:
-                self.voice.say(answer)
+            self.ask(prompt)
+        self.voice.close()
         print(f"{self.name} offline.")
         return 0
 
@@ -345,7 +453,7 @@ class Jarvis:
                 print(f"    ({self.ears.error})")
             return self.chat_loop()
         if not self.voice.available:
-            print("[i] Speech output is off - set voice.enabled to true in config.json to hear replies.")
+            print("[i] Speech output is off - run with --speak, or set voice.enabled to true in config.json.")
 
         print(f"\n{self.name} listening - model {self.client.model}.")
         print("Speak after the prompt. Say 'exit' or press Ctrl+C to quit.\n")
@@ -359,12 +467,12 @@ class Jarvis:
                 print(f"You: {heard}")
                 if heard.lower().strip(" .!?") in {"exit", "quit", "goodbye", "bye"}:
                     break
-                answer = self.ask(heard)
-                if answer:
-                    self.voice.say(answer)
+                self.ask(heard)
+                self.voice.wait()
             except KeyboardInterrupt:
                 print()
                 break
+        self.voice.close()
         print(f"{self.name} offline.")
         return 0
 
@@ -421,6 +529,8 @@ def selftest(config: dict) -> int:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="jarvis", description="Local JARVIS assistant")
     parser.add_argument("--voice", action="store_true", help="talk to JARVIS with the microphone")
+    parser.add_argument("--speak", action="store_true", help="force spoken replies on")
+    parser.add_argument("--quiet", action="store_true", help="force spoken replies off")
     parser.add_argument("--ask", metavar="TEXT", help="ask one question and exit")
     parser.add_argument("--selftest", action="store_true", help="check the installation and exit")
     parser.add_argument("--model", help="override the model for this run")
@@ -437,15 +547,18 @@ def main(argv: list[str] | None = None) -> int:
     if args.selftest:
         return selftest(config)
 
-    if args.voice:
+    if args.voice or args.speak:
         config.setdefault("voice", {})["enabled"] = True
+    if args.quiet:
+        config.setdefault("voice", {})["enabled"] = False
 
     jarvis = Jarvis(config)
     if args.ask:
         if not jarvis.preflight():
             return 2
         answer = jarvis.ask(args.ask)
-        jarvis.voice.say(answer)
+        jarvis.voice.wait()
+        jarvis.voice.close()
         return 0 if answer else 1
     if args.voice:
         return jarvis.voice_loop()

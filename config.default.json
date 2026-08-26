@@ -1,15 +1,18 @@
 {
-  "model": "llama3.1:8b",
+  "model": "llama3.2:3b",
   "ollama_host": "http://127.0.0.1:11434",
   "name": "JARVIS",
   "user_name": "Sir",
-  "system_prompt": "You are JARVIS, a local assistant running on the user's own machine. Be concise, direct and useful. Answer in a sentence or two unless asked for detail. If you do not know something, say so plainly.",
+  "system_prompt": "You are JARVIS, a local assistant running on the user's own machine. Answer in one or two short sentences - your reply is read aloud, so keep it brief and conversational. Never use markdown, bullet points or headings. If you do not know something, say so plainly. Only give a longer answer when the user explicitly asks for detail.",
   "temperature": 0.7,
-  "max_history_turns": 12,
+  "num_ctx": 2048,
+  "num_predict": 220,
+  "keep_alive": "30m",
+  "max_history_turns": 6,
   "request_timeout_seconds": 120,
   "voice": {
-    "enabled": false,
-    "rate": 185,
+    "enabled": true,
+    "rate": 190,
     "volume": 1.0,
     "voice_name": ""
   },

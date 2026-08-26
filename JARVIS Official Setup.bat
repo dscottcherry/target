@@ -25,10 +25,11 @@ if "%SCRIPT_DIR:~-1%"=="\" set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
 
 set "APP_NAME=JARVIS"
 set "INSTALL_DIR=%USERPROFILE%\JARVIS"
-set "MODEL=llama3.1:8b"
+set "MODEL=llama3.2:3b"
 set "SKIP_OLLAMA=0"
 set "SKIP_MODEL=0"
 set "FORCE=0"
+set "RESET_CONFIG=0"
 set "MAKE_SHORTCUT=1"
 set "DO_PAUSE=1"
 set "EXITCODE=0"
@@ -49,6 +50,7 @@ if /i "!ARG!"=="--model"        ( set "MODEL=%~2"       & shift & shift & goto p
 if /i "!ARG!"=="--skip-ollama"  ( set "SKIP_OLLAMA=1"   & shift & goto parse_args )
 if /i "!ARG!"=="--skip-model"   ( set "SKIP_MODEL=1"    & shift & goto parse_args )
 if /i "!ARG!"=="--force"        ( set "FORCE=1"         & shift & goto parse_args )
+if /i "!ARG!"=="--reset-config" ( set "RESET_CONFIG=1"  & shift & goto parse_args )
 if /i "!ARG!"=="--no-shortcut"  ( set "MAKE_SHORTCUT=0" & shift & goto parse_args )
 if /i "!ARG!"=="--no-pause"     ( set "DO_PAUSE=0"      & shift & goto parse_args )
 echo Unknown option: !ARG!
@@ -62,10 +64,11 @@ echo.
 echo   Usage: "JARVIS Official Setup.bat" [options]
 echo.
 echo     --dir ^<path^>     Install location      (default %%USERPROFILE%%\JARVIS)
-echo     --model ^<name^>   Ollama model to pull  (default llama3.1:8b)
+echo     --model ^<name^>   Ollama model to pull  (default llama3.2:3b)
 echo     --skip-ollama     Do not install or check Ollama
 echo     --skip-model      Install Ollama but do not pull the model
 echo     --force           Rebuild the virtual environment from scratch
+echo     --reset-config    Replace config.json with current defaults ^(old one kept^)
 echo     --no-shortcut     Do not create desktop / Start Menu shortcuts
 echo     --no-pause        Do not wait for a key press when finished
 echo     -h, --help        Show this help
@@ -269,6 +272,11 @@ if errorlevel 1 (
 
 rem ------------------------------------------------------- 8. config + launcher
 call :step "Writing the configuration and launcher"
+if exist "%INSTALL_DIR%\config\config.json" if "%RESET_CONFIG%"=="1" (
+    copy /y "%INSTALL_DIR%\config\config.json" "%INSTALL_DIR%\config\config.json.bak" >nul
+    del /q "%INSTALL_DIR%\config\config.json"
+    echo   Old config saved as config\config.json.bak
+)
 if exist "%INSTALL_DIR%\config\config.json" (
     echo   Keeping your existing config\config.json
 ) else (
