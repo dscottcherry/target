@@ -1,0 +1,15 @@
+# JARVIS - local assistant stack
+# Installed into %USERPROFILE%\JARVIS\.venv by "JARVIS Official Setup.bat".
+
+# --- core (required) -------------------------------------------------------
+requests>=2.31
+python-dotenv>=1.0
+rich>=13.7
+
+# --- speech output (optional: Windows SAPI5, no compiler needed) ------------
+pyttsx3>=2.90
+
+# --- speech input (optional: local Whisper, CPU or CUDA) -------------------
+faster-whisper>=1.0
+sounddevice>=0.4.6
+numpy>=1.24
