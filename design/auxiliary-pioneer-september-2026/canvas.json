@@ -1,12 +1,16 @@
 {
+  "pages": [
+    { "id": "page-1", "name": "Schedule" },
+    { "id": "page-2", "name": "Alternates" }
+  ],
   "artboards": [
-    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 816, "h": 1056, "title": "Warm editorial (deliverable)", "print": "fixed" },
-    { "file": "DirectionB.dc.html", "x": 916, "y": 0, "w": 816, "h": 1056, "title": "Option B — Modern ledger", "print": "fixed" },
-    { "file": "DirectionC.dc.html", "x": 1832, "y": 0, "w": 816, "h": 1056, "title": "Option C — Notice-board poster", "print": "fixed" }
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 816, "h": 1056, "title": "September 2026 — South Congregation", "print": "fixed", "page": "page-1" },
+    { "file": "DirectionA.dc.html", "x": 0, "y": 0, "w": 816, "h": 1056, "title": "Option A — Warm editorial", "print": "fixed", "page": "page-2" },
+    { "file": "DirectionB.dc.html", "x": 916, "y": 0, "w": 816, "h": 1056, "title": "Option B — Modern ledger", "print": "fixed", "page": "page-2" }
   ],
   "annotations": [
-    { "id": "brief", "x": 0, "y": -150, "w": 400, "text": "Auxiliary Pioneer Schedule — September 2026\n7 continuous · 13 September-only · 20 total.\nLetter portrait, print-ready." },
-    { "id": "options", "x": 916, "y": -150, "w": 700, "text": "Two alternate directions beside the deliverable. B trades warmth for scannability; C trades ink for across-the-room legibility." }
+    { "id": "brief", "x": 0, "y": -140, "w": 500, "text": "Auxiliary Pioneer Schedule — September 2026, South Congregation.\n7 continuous · 13 September-only · 20 total. Letter portrait, print-ready." },
+    { "id": "alts", "x": 0, "y": -140, "w": 700, "page": "page-2", "text": "The two directions not chosen, kept for reference. Neither carries the congregation name." }
   ],
-  "launch": { "view": "canvas" }
+  "launch": { "view": "canvas", "page": "page-1" }
 }
