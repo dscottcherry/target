@@ -1,0 +1,12 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 816, "h": 1056, "title": "Warm editorial (deliverable)", "print": "fixed" },
+    { "file": "DirectionB.dc.html", "x": 916, "y": 0, "w": 816, "h": 1056, "title": "Option B — Modern ledger", "print": "fixed" },
+    { "file": "DirectionC.dc.html", "x": 1832, "y": 0, "w": 816, "h": 1056, "title": "Option C — Notice-board poster", "print": "fixed" }
+  ],
+  "annotations": [
+    { "id": "brief", "x": 0, "y": -150, "w": 400, "text": "Auxiliary Pioneer Schedule — September 2026\n7 continuous · 13 September-only · 20 total.\nLetter portrait, print-ready." },
+    { "id": "options", "x": 916, "y": -150, "w": 700, "text": "Two alternate directions beside the deliverable. B trades warmth for scannability; C trades ink for across-the-room legibility." }
+  ],
+  "launch": { "view": "canvas" }
+}
