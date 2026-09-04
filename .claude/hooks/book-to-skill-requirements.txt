@@ -1,0 +1,22 @@
+# Extractor dependencies for the vendored book-to-skill skill
+# (.claude/skills/book-to-skill). These are upstream's optional extras;
+# without them PDF extraction fails outright and EPUB/DOCX/HTML/RTF fall
+# back to lower-quality stdlib parsers.
+#
+# Unpinned on purpose so the set does not rot. Versions verified working
+# on 2026-09-04, Python 3.11.15:
+#   pypdf==6.17.0  EbookLib==0.20  beautifulsoup4==4.15.0
+#   python-docx==1.2.0  striprtf==0.0.33
+#
+# Deliberately NOT included:
+#   docling        - only for `--mode technical`; large dependency tree
+#   pdf-inspector  - optional quality/provenance layer
+#   pdfminer.six   - redundant third PDF parser; pypdf covers the chain
+#   trafilatura    - HTML quality upgrade; beautifulsoup4 is sufficient
+#   Calibre        - system package, required only for MOBI/AZW/AZW3
+
+pypdf
+ebooklib
+beautifulsoup4
+python-docx
+striprtf
